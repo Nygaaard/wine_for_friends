@@ -46,7 +46,6 @@ function producer_metabox_callback($post) {
         $value = get_post_meta($post->ID, "producer_$key", true);
         echo "<p><label for='producer_$key'><strong>$label</strong></label><br>";
 
-        // If the field is 'description', we use a textarea
         if ($key === 'description') {
             echo "<textarea id='producer_$key' name='producer_$key' rows='4' style='width:100%;'>" . esc_textarea($value) . "</textarea>";
         } else {
