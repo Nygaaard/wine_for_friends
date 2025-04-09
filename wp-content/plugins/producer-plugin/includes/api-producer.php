@@ -3,7 +3,6 @@ function producer_register_rest_fields() {
     // Define the fields for the producer post type
     $fields = ['name', 'description', 'country'];
 
-    // Register each field in the REST API
     foreach ($fields as $field) {
         register_rest_field('producer', "producer_$field", [
             'get_callback' => function ($post) use ($field) {
