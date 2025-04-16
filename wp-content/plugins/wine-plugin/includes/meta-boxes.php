@@ -17,7 +17,8 @@ function wine_metabox_callback($post) {
         }
         .wine-metabox-wrapper input[type="text"],
         .wine-metabox-wrapper input[type="number"],
-        .wine-metabox-wrapper textarea {
+        .wine-metabox-wrapper textarea,
+        .wine-metabox-wrapper select {
             width: 100%;
             padding: 10px;
             margin-top: 4px;
@@ -51,15 +52,35 @@ function wine_metabox_callback($post) {
         'servera_till' => 'Servera till',
         'servering' => 'Servering',
         'storlek' => 'Storlek',
-        'artnr_systembolaget' => 'Art.nr Systembolaget'
+        'artnr_systembolaget' => 'Art.nr Systembolaget',
+        'kategori' => 'Kategori',
+        'systembolaget_url' => 'Systembolaget-länk',
+        'bestallning' => 'Beställning',
+        'dosage' => 'Dosage',
+        'varugrupp' => 'Varugrupp'
     ];
 
     foreach ($fields as $key => $label) {
         $value = get_post_meta($post->ID, "wff_$key", true);
         echo "<p><label for='wff_$key'>$label:</label>";
-        echo in_array($key, ['vinifikation', 'beskrivning', 'servering'])
-            ? "<textarea id='wff_$key' name='wff_$key' rows='4'>" . esc_textarea($value) . "</textarea>"
-            : "<input type='text' id='wff_$key' name='wff_$key' value='" . esc_attr($value) . "' />";
+        
+        if ($key === 'kategori') {
+            echo "<select id='wff_$key' name='wff_$key'>
+                    <option value='Beställningssortiment'" . selected($value, 'Beställningssortiment', false) . ">Beställningssortiment</option>
+                    <option value='Privatimport'" . selected($value, 'Privatimport', false) . ">Privatimport</option>
+                  </select>";
+        } elseif ($key === 'varugrupp') {
+            echo "<select id='wff_$key' name='wff_$key'>
+                    <option value='Rött vin'" . selected($value, 'Rött vin', false) . ">Rött vin</option>
+                    <option value='Vitt vin'" . selected($value, 'Vitt vin', false) . ">Vitt vin</option>
+                    <option value='Mousserande vin'" . selected($value, 'Mousserande vin', false) . ">Mousserande vin</option>
+                    <option value='Rosévin'" . selected($value, 'Rosévin', false) . ">Rosévin</option>
+                  </select>";
+        } elseif (in_array($key, ['vinifikation', 'beskrivning', 'servering'])) {
+            echo "<textarea id='wff_$key' name='wff_$key' rows='4'>" . esc_textarea($value) . "</textarea>";
+        } else {
+            echo "<input type='text' id='wff_$key' name='wff_$key' value='" . esc_attr($value) . "' />";
+        }
         echo "</p>";
     }
 
@@ -71,7 +92,9 @@ function wine_save_metabox_data($post_id) {
         'pris', 'producent', 'argang', 'alkohol',
         'land', 'region', 'distrikt', 'druva', 'jordmon',
         'vinifikation', 'beskrivning', 'servera_till', 'servering',
-        'storlek', 'artnr_systembolaget'
+        'storlek', 'artnr_systembolaget', 'kategori',
+        'systembolaget_url', 'bestallning',
+        'dosage', 'varugrupp'
     ];
 
     foreach ($fields as $field) {

@@ -4,7 +4,9 @@ function wine_register_rest_fields() {
         'pris', 'producent', 'argang', 'alkohol',
         'land', 'region', 'distrikt', 'druva', 'jordmon',
         'vinifikation', 'beskrivning', 'servera_till', 'servering',
-        'storlek', 'artnr_systembolaget'
+        'storlek', 'artnr_systembolaget', 'kategori',
+        'systembolaget_url', 'bestallning',
+        'dosage', 'varugrupp'
     ];
 
     foreach ($fields as $field) {
