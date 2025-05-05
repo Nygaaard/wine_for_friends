@@ -63,8 +63,23 @@ function wine_metabox_callback($post) {
     foreach ($fields as $key => $label) {
         $value = get_post_meta($post->ID, "wff_$key", true);
         echo "<p><label for='wff_$key'>$label:</label>";
-        
-        if ($key === 'kategori') {
+
+        if ($key === 'producent') {
+            $producers = get_posts([
+                'post_type' => 'producer',
+                'numberposts' => -1,
+                'orderby' => 'title',
+                'order' => 'ASC'
+            ]);
+
+            echo "<select id='wff_producent' name='wff_producent'>";
+            echo "<option value=''>Välj producent</option>";
+            foreach ($producers as $producer) {
+                $selected = selected($value, $producer->ID, false);
+                echo "<option value='{$producer->ID}' $selected>{$producer->post_title}</option>";
+            }
+            echo "</select>";
+        } elseif ($key === 'kategori') {
             echo "<select id='wff_$key' name='wff_$key'>
                     <option value='Beställningssortiment'" . selected($value, 'Beställningssortiment', false) . ">Beställningssortiment</option>
                     <option value='Privatimport'" . selected($value, 'Privatimport', false) . ">Privatimport</option>
@@ -81,6 +96,7 @@ function wine_metabox_callback($post) {
         } else {
             echo "<input type='text' id='wff_$key' name='wff_$key' value='" . esc_attr($value) . "' />";
         }
+
         echo "</p>";
     }
 

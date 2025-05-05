@@ -12,7 +12,15 @@ function wine_register_rest_fields() {
     foreach ($fields as $field) {
         register_rest_field('wine', "wff_$field", [
             'get_callback' => function ($post) use ($field) {
-                return get_post_meta($post['id'], "wff_$field", true);
+                $value = get_post_meta($post['id'], "wff_$field", true);
+                if ($field === 'producent') {
+                    $producer = get_post($value);
+                    return $producer ? [
+                        'id' => $producer->ID,
+                        'title' => $producer->post_title
+                    ] : null;
+                }
+                return $value;
             },
             'schema' => null,
         ]);
